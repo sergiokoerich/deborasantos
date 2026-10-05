@@ -1,15 +1,53 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+/*
+  Paleta terracota (cor das sacolas e do logo da clínica). Contrastes medidos (WCAG):
+  espresso/cream 14,4 · stone/cream 6,9 · stone/sand 6,3 · cream/terracotta 5,3 ·
+  terracotta/cream 5,3 · blush/espresso 7,1. Blush em fundo claro só para filetes decorativos.
+*/
+@theme {
+  --color-cream: #faf7f2; /* fundo */
+  --color-sand: #f3ece6; /* fundo das seções alternadas */
+  --color-espresso: #2b2320; /* títulos, topo, faixa escura, rodapé */
+  --color-stone: #5c5550; /* texto corrido */
+  --color-terracotta: #ab4922; /* cor da marca: botões, ícones, numerais */
+  --color-terracotta-dark: #8a3a1b; /* hover */
+  --color-blush: #d9a48f; /* filetes; texto e foco sobre fundo escuro */
+
+  --font-display: 'Fraunces Variable', Georgia, serif;
+  --font-body: Inter, sans-serif;
+
+  --radius-soft: 4px;
+}
+
+/*
+  O Tailwind 4 mudou a cor padrão de borda para `currentcolor`.
+  Mantém o comportamento do Tailwind 3 para bordas sem cor explícita.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
 
 @layer base {
   html {
     scroll-behavior: smooth;
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
   body {
-    @apply bg-cream text-forest-dark font-body;
-    accent-color: #AB4922;
+    @apply bg-cream text-espresso font-body;
+    accent-color: var(--color-terracotta);
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -17,70 +55,59 @@
     letter-spacing: -0.02em;
   }
 
+  /* O Tailwind 4 deixou o cursor padrão nos botões; mantém a mãozinha do Tailwind 3. */
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
+  }
+
   :focus-visible {
-    outline: 2px solid #AB4922;
+    outline: 2px solid var(--color-terracotta);
     outline-offset: 3px;
     border-radius: 4px;
   }
+
+  /* Em fundos escuros o terracota não tem contraste suficiente para o foco. */
+  .on-dark :focus-visible {
+    outline-color: var(--color-blush);
+  }
 }
 
-@layer components {
-  .btn-primary {
-    @apply inline-flex items-center gap-3 bg-terracotta-dark text-cream px-8 py-4 rounded-soft font-body font-medium tracking-wider uppercase text-sm
-           transition-all duration-300 hover:bg-terracotta hover:-translate-y-0.5 active:translate-y-0;
-  }
+@utility btn-primary {
+  @apply inline-flex items-center gap-3 bg-terracotta text-cream px-8 py-4 rounded-soft font-body font-medium text-base
+           transition-all duration-300 hover:bg-terracotta-dark hover:-translate-y-0.5 active:translate-y-0;
+}
 
-  .btn-secondary {
-    @apply inline-flex items-center gap-3 border border-terracotta-dark text-terracotta-dark px-8 py-4 rounded-soft font-body font-medium tracking-wider uppercase text-sm
-           transition-all duration-300 hover:bg-terracotta-dark hover:text-cream;
-  }
-
-  .btn-link {
-    @apply inline-flex items-center gap-2 text-forest-dark font-body text-sm tracking-widest uppercase
-           border-b border-forest-dark/40 pb-1
+@utility btn-link {
+  @apply inline-flex items-center gap-2 text-espresso font-body font-medium text-base
+           border-b border-espresso/40 pb-1
            transition-colors duration-300 hover:text-terracotta-dark hover:border-terracotta-dark;
-  }
+}
 
-  .section-title {
-    @apply text-4xl md:text-5xl lg:text-6xl font-display font-light text-forest-dark;
-    letter-spacing: -0.02em;
-  }
+@utility section-title {
+  @apply text-4xl md:text-5xl lg:text-6xl font-display font-normal text-espresso;
+  letter-spacing: -0.03em;
+}
 
-  .section-subtitle {
-    @apply text-lg md:text-xl text-forest font-body leading-relaxed;
-  }
+@utility section-subtitle {
+  @apply text-lg md:text-xl text-stone font-body leading-relaxed;
+}
 
-  .eyebrow {
-    @apply inline-flex items-center gap-3 font-body text-xs tracking-[0.3em] uppercase text-forest;
-  }
+@utility eyebrow {
+  @apply inline-flex items-center gap-3 font-body text-xs tracking-[0.3em] uppercase text-stone;
 
-  .eyebrow::before {
+  &::before {
     content: '';
     display: inline-block;
     width: 40px;
     height: 1px;
-    background-color: #DCA15D;
-  }
-
-  .editorial-numeral {
-    @apply font-display font-light text-gold;
-    letter-spacing: -0.02em;
+    background-color: var(--color-blush);
   }
 }
 
-@layer utilities {
-  .gradient-forest {
-    background: linear-gradient(135deg, #273617 0%, #5F6C37 100%);
-  }
-
-  .filete-gold::after {
-    content: '';
-    display: block;
-    width: 60px;
-    height: 1px;
-    background-color: #DCA15D;
-    margin-top: 1rem;
-  }
+@utility editorial-numeral {
+  @apply font-display font-light text-terracotta;
+  letter-spacing: -0.02em;
 }
 
 ::-webkit-scrollbar {
@@ -88,13 +115,13 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #F6F1E7;
+  background: var(--color-cream);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #5F6C37;
+  background: var(--color-stone);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #273617;
+  background: var(--color-espresso);
 }

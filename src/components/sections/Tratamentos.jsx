@@ -1,44 +1,46 @@
 import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
+import LinkExterno from '../ui/LinkExterno'
+import { whatsappUrl } from '../../data/contato'
 
-const WHATSAPP_URL = 'https://wa.me/5548991979007?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o%20com%20a%20Dra.%20D%C3%A9bora%20Santos.'
-
+// Textos descritivos, sem promessa de resultado (Res. CFO-196/2019, art. 2º, §1º).
+// A lista é precedida da qualificação "clínica geral" (Código de Ética, art. 43, §1º, I).
 const tratamentos = [
   {
     numeral: '01',
     title: 'Clareamento Dental',
     description:
-      'Devolva o brilho natural do seu sorriso com técnicas seguras e eficazes de clareamento profissional.',
+      'Clareamento profissional com avaliação prévia e acompanhamento da sensibilidade durante o tratamento.',
   },
   {
     numeral: '02',
     title: 'Implantes Dentários',
     description:
-      'Soluções modernas e duradouras para substituição de dentes perdidos, devolvendo função e estética.',
+      'Reposição de dentes perdidos com implantes, planejada a partir da avaliação clínica e de exames.',
   },
   {
     numeral: '03',
     title: 'Lentes de Contato Dental',
     description:
-      'Transforme seu sorriso com lentes ultrafinas que corrigem cor, forma e pequenas imperfeições.',
+      'Lâminas ultrafinas para ajustar cor, forma e pequenas imperfeições, quando há indicação clínica.',
   },
   {
     numeral: '04',
     title: 'Harmonização Orofacial',
     description:
-      'Procedimentos estéticos que equilibram e realçam a harmonia do seu rosto de forma natural.',
+      'Procedimentos estéticos da face indicados após avaliação, com foco em equilíbrio e naturalidade.',
   },
   {
     numeral: '05',
     title: 'Ortodontia',
     description:
-      'Alinhamento dental com aparelhos convencionais ou invisíveis para um sorriso perfeito.',
+      'Aparelhos convencionais ou alinhadores transparentes para alinhar os dentes e ajustar a mordida.',
   },
   {
     numeral: '06',
     title: 'Próteses Dentárias',
     description:
-      'Próteses personalizadas com acabamento natural para restaurar a funcionalidade e beleza do seu sorriso.',
+      'Próteses personalizadas para repor dentes e recuperar a mastigação, com acabamento de aparência natural.',
   },
 ]
 
@@ -76,8 +78,8 @@ function Tratamentos() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="section-subtitle"
           >
-            Cada procedimento é avaliado caso a caso, com critério clínico e foco
-            em saúde, função e naturalidade.
+            Atendimento em clínica geral. Cada procedimento é avaliado caso a caso,
+            com critério clínico e foco em saúde, função e naturalidade.
           </motion.p>
         </div>
 
@@ -89,16 +91,19 @@ function Tratamentos() {
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: 0.3 + index * 0.08 }}
-              className="flex gap-6 py-8 border-b border-forest/15 group"
+              className="flex gap-6 py-8 border-b border-espresso/15 group"
             >
-              <p className="editorial-numeral text-3xl md:text-4xl flex-shrink-0 w-16 group-hover:text-terracotta-dark transition-colors duration-300">
+              <p
+                className="editorial-numeral text-3xl md:text-4xl shrink-0 w-16 group-hover:text-terracotta-dark transition-colors duration-300"
+                aria-hidden="true"
+              >
                 {item.numeral}
               </p>
               <div className="flex-1">
-                <h3 className="font-display text-2xl md:text-3xl font-light text-forest-dark mb-2 group-hover:text-terracotta-dark transition-colors duration-300">
+                <h3 className="font-display text-2xl md:text-3xl font-medium text-espresso mb-2 group-hover:text-terracotta-dark transition-colors duration-300">
                   {item.title}
                 </h3>
-                <p className="font-body text-forest/80 leading-relaxed text-sm md:text-base max-w-md">
+                <p className="font-body text-stone leading-relaxed text-sm md:text-base max-w-md">
                   {item.description}
                 </p>
               </div>
@@ -113,14 +118,9 @@ function Tratamentos() {
           transition={{ duration: 0.5, delay: 0.9 }}
           className="text-center"
         >
-          <a
-            href={WHATSAPP_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-primary"
-          >
+          <LinkExterno href={whatsappUrl()} className="btn-primary">
             Agendar avaliação
-          </a>
+          </LinkExterno>
         </motion.div>
 
       </div>

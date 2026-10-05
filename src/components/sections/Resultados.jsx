@@ -1,130 +1,101 @@
 import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
-import antes1 from '../../assets/images/antesxdepoiscliente1.webp'
-import antes2 from '../../assets/images/antesxdepoiscliente2.webp'
-import antes3 from '../../assets/images/antesxdepoiscliente3.webp'
+import caso1Antes from '../../assets/images/resultados/caso1-antes.webp'
+import caso1Depois from '../../assets/images/resultados/caso1-depois.webp'
+import caso2Antes from '../../assets/images/resultados/caso2-antes.webp'
+import caso2Depois from '../../assets/images/resultados/caso2-depois.webp'
+import caso3Antes from '../../assets/images/resultados/caso3-antes.webp'
+import caso3Depois from '../../assets/images/resultados/caso3-depois.webp'
+import LinkExterno from '../ui/LinkExterno'
+import { PROFISSIONAL, whatsappUrl } from '../../data/contato'
 
-const WHATSAPP_URL = 'https://wa.me/5548991979007?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o%20com%20a%20Dra.%20D%C3%A9bora%20Santos.'
+// Legenda obrigatória em toda imagem de caso (Res. CFO-196/2019, art. 4º: nome e inscrição).
+const LEGENDA = `${PROFISSIONAL.nome} · ${PROFISSIONAL.cro}`
 
+// Antes e depois são os dois quadros das imagens originais, separados sem outro corte.
 const casos = [
   {
-    numeral: '01',
-    label: 'Caso 01',
-    image: antes1,
-    alt: 'Caso 01 — comparativo antes e depois de tratamento odontológico',
+    id: 'caso-1',
     title: 'Reabilitação estética',
     description:
       'Planejamento digital com mock-up funcional, restauração da harmonia do sorriso e ajuste de proporções dentárias. Resultado natural conduzido em etapas controladas.',
+    antes: { src: caso1Antes, width: 1080, height: 525 },
+    depois: { src: caso1Depois, width: 1080, height: 533 },
   },
   {
-    numeral: '02',
-    label: 'Caso 02',
-    image: antes2,
-    alt: 'Caso 02 — comparativo antes e depois de tratamento odontológico',
+    id: 'caso-2',
     title: 'Lentes de contato dental',
     description:
       'Aplicação de lentes ultrafinas após avaliação criteriosa de indicação clínica. Foco em preservação de estrutura dental e durabilidade do trabalho.',
+    antes: { src: caso2Antes, width: 952, height: 403 },
+    depois: { src: caso2Depois, width: 952, height: 345 },
   },
   {
-    numeral: '03',
-    label: 'Caso 03',
-    image: antes3,
-    alt: 'Caso 03 — comparativo antes e depois de tratamento odontológico',
+    id: 'caso-3',
     title: 'Clareamento profissional',
     description:
       'Protocolo clínico de clareamento com acompanhamento individual, atenção à sensibilidade e estabilidade do tom ao longo do tempo.',
+    antes: { src: caso3Antes, width: 680, height: 359 },
+    depois: { src: caso3Depois, width: 680, height: 336 },
   },
 ]
 
-function CasoArticle({ caso, index }) {
+// As duas fotos do caso ficam no mesmo quadro (a altura da menor). A largura e a escala não mudam;
+// a mais alta só perde um pouco das bordas de cima e de baixo.
+function Foto({ foto, rotulo, titulo, proporcao }) {
+  return (
+    <div className="relative overflow-hidden rounded-lg bg-espresso/5" style={{ aspectRatio: proporcao }}>
+      <img
+        src={foto.src}
+        alt={`${rotulo} — ${titulo}`}
+        width={foto.width}
+        height={foto.height}
+        loading="lazy"
+        decoding="async"
+        className="w-full h-full object-cover"
+      />
+      <span
+        className="absolute left-3 top-3 rounded-soft bg-cream/90 px-2.5 py-1 font-body text-sm font-medium text-espresso"
+        aria-hidden="true"
+      >
+        {rotulo}
+      </span>
+    </div>
+  )
+}
+
+function Caso({ caso }) {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
-
-  const isReversed = index % 2 === 1
-  const headingId = `caso-${caso.numeral}-titulo`
+  const headingId = `${caso.id}-titulo`
+  const proporcao = `${caso.antes.width} / ${Math.min(caso.antes.height, caso.depois.height)}`
 
   return (
-    <article
-      ref={ref}
-      aria-labelledby={headingId}
-      className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center"
-    >
-      {/* Imagem */}
+    <article ref={ref} aria-labelledby={headingId}>
       <motion.figure
-        initial={{ opacity: 0, y: 40, scale: 0.98 }}
-        animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
-        transition={{ duration: 0.9, ease: 'easeOut' }}
-        className={`lg:col-span-5 overflow-hidden bg-forest-dark/5 max-w-sm lg:max-w-none mx-auto ${
-          isReversed ? 'lg:col-start-8 lg:order-2' : 'lg:col-start-1'
-        }`}
+        initial={{ opacity: 0, y: 30 }}
+        animate={isInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.7, ease: 'easeOut' }}
+        className="grid grid-cols-1 sm:grid-cols-2 gap-3 items-start"
       >
-        <img
-          src={caso.image}
-          alt={caso.alt}
-          loading={index === 0 ? 'eager' : 'lazy'}
-          className="w-full h-full object-cover aspect-[3/4] hover:scale-[1.02] transition-transform duration-700"
-        />
+        <Foto foto={caso.antes} rotulo="Antes" titulo={caso.title} proporcao={proporcao} />
+        <Foto foto={caso.depois} rotulo="Depois" titulo={caso.title} proporcao={proporcao} />
+        <figcaption className="sm:col-span-2 font-body text-xs text-stone">{LEGENDA}</figcaption>
       </motion.figure>
 
-      {/* Texto */}
-      <div
-        className={`lg:col-span-6 flex flex-col gap-6 lg:gap-8 max-w-lg ${
-          isReversed
-            ? 'lg:col-start-1 lg:order-1 lg:pr-8 xl:pr-16 lg:items-end lg:text-right lg:ml-auto'
-            : 'lg:col-start-7 lg:pl-8 xl:pl-16'
-        }`}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={isInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.6, delay: 0.2 }}
+        className="mt-6 grid grid-cols-1 lg:grid-cols-12 gap-3 lg:gap-12"
       >
-        {/* Numeral + filete */}
-        <div className={`flex flex-col gap-4 ${isReversed ? 'lg:items-end' : ''}`}>
-          <motion.p
-            initial={{ opacity: 0, x: isReversed ? 20 : -20 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="editorial-numeral text-7xl lg:text-8xl leading-none"
-          >
-            {caso.numeral}
-          </motion.p>
-          <motion.span
-            initial={{ width: 0 }}
-            animate={isInView ? { width: 60 } : {}}
-            transition={{ duration: 0.6, delay: 0.4, ease: 'easeOut' }}
-            className="h-px bg-gold"
-            aria-hidden="true"
-          />
-        </div>
-
-        {/* Título + descrição */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, delay: 0.5 }}
-          className="flex flex-col gap-4"
-        >
-          <h3
-            id={headingId}
-            className="font-display text-3xl lg:text-4xl font-light text-forest-dark"
-            style={{ letterSpacing: '-0.02em' }}
-          >
-            {caso.title}
-          </h3>
-          <p className="font-body text-base lg:text-lg text-forest leading-relaxed">
-            {caso.description}
-          </p>
-        </motion.div>
-
-        {/* Tag rodapé "caso 01" */}
-        <motion.span
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.5, delay: 0.7 }}
-          className={`font-body text-xs tracking-[0.3em] uppercase text-forest/60 inline-flex items-center gap-3 ${
-            isReversed ? 'lg:flex-row-reverse' : ''
-          }`}
-        >
-          <span className="w-10 h-px bg-gold" aria-hidden="true" />
-          {caso.label}
-        </motion.span>
-      </div>
+        <h3 id={headingId} className="lg:col-span-4 font-display text-2xl lg:text-3xl font-medium text-espresso">
+          {caso.title}
+        </h3>
+        <p className="lg:col-span-8 font-body text-stone leading-relaxed max-w-2xl">
+          {caso.description}
+        </p>
+      </motion.div>
     </article>
   )
 }
@@ -134,11 +105,9 @@ function Resultados() {
   const isHeaderInView = useInView(headerRef, { once: true, margin: '-100px' })
 
   return (
-    <section id="resultados" className="py-24 lg:py-32 bg-forest/5 relative overflow-hidden">
-      <div className="container mx-auto px-6 lg:px-16 xl:px-24 relative">
-
-        {/* Header */}
-        <header ref={headerRef} className="mb-20 lg:mb-28 max-w-3xl">
+    <section id="resultados" className="py-24 lg:py-32 bg-sand relative overflow-hidden">
+      <div className="container mx-auto px-6 lg:px-12 relative">
+        <header ref={headerRef} className="mb-14 lg:mb-20 max-w-3xl">
           <motion.span
             initial={{ opacity: 0, y: 20 }}
             animate={isHeaderInView ? { opacity: 1, y: 0 } : {}}
@@ -168,30 +137,17 @@ function Resultados() {
           </motion.p>
         </header>
 
-        {/* Lista de casos — zigue-zague editorial */}
-        <div role="list" className="space-y-20 lg:space-y-32">
-          {casos.map((caso, index) => (
-            <div key={caso.numeral} role="listitem">
-              <CasoArticle caso={caso} index={index} />
-              {index < casos.length - 1 && (
-                <hr className="mt-20 lg:mt-32 border-t border-forest/10" />
-              )}
-            </div>
+        <div className="space-y-16 lg:space-y-24">
+          {casos.map((caso) => (
+            <Caso key={caso.id} caso={caso} />
           ))}
         </div>
 
-        {/* CTA */}
-        <footer className="mt-24 lg:mt-32 text-center">
-          <a
-            href={WHATSAPP_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-primary"
-          >
+        <footer className="mt-16 lg:mt-24 text-center">
+          <LinkExterno href={whatsappUrl()} className="btn-primary">
             Agendar avaliação
-          </a>
+          </LinkExterno>
         </footer>
-
       </div>
     </section>
   )
