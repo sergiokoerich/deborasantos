@@ -1,5 +1,4 @@
-import { motion, useInView } from 'framer-motion'
-import { useRef } from 'react'
+import { m } from 'framer-motion'
 import caso1Antes from '../../assets/images/resultados/caso1-antes.webp'
 import caso1Depois from '../../assets/images/resultados/caso1-depois.webp'
 import caso2Antes from '../../assets/images/resultados/caso2-antes.webp'
@@ -8,6 +7,7 @@ import caso3Antes from '../../assets/images/resultados/caso3-antes.webp'
 import caso3Depois from '../../assets/images/resultados/caso3-depois.webp'
 import LinkExterno from '../ui/LinkExterno'
 import { PROFISSIONAL, whatsappUrl } from '../../data/contato'
+import { REVELAR } from '../../lib/motion'
 
 // Legenda obrigatória em toda imagem de caso (Res. CFO-196/2019, art. 4º: nome e inscrição).
 const LEGENDA = `${PROFISSIONAL.nome} · ${PROFISSIONAL.cro}`
@@ -65,76 +65,44 @@ function Foto({ foto, rotulo, titulo, proporcao }) {
 }
 
 function Caso({ caso }) {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: '-100px' })
   const headingId = `${caso.id}-titulo`
   const proporcao = `${caso.antes.width} / ${Math.min(caso.antes.height, caso.depois.height)}`
 
   return (
-    <article ref={ref} aria-labelledby={headingId}>
-      <motion.figure
-        initial={{ opacity: 0, y: 30 }}
-        animate={isInView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.7, ease: 'easeOut' }}
-        className="grid grid-cols-1 sm:grid-cols-2 gap-3 items-start"
-      >
+    <article aria-labelledby={headingId}>
+      <m.figure {...REVELAR} className="grid grid-cols-1 sm:grid-cols-2 gap-3 items-start">
         <Foto foto={caso.antes} rotulo="Antes" titulo={caso.title} proporcao={proporcao} />
         <Foto foto={caso.depois} rotulo="Depois" titulo={caso.title} proporcao={proporcao} />
-        <figcaption className="sm:col-span-2 font-body text-xs text-stone">{LEGENDA}</figcaption>
-      </motion.figure>
+        <figcaption translate="no" className="sm:col-span-2 font-body text-xs text-stone">{LEGENDA}</figcaption>
+      </m.figure>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={isInView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.6, delay: 0.2 }}
-        className="mt-6 grid grid-cols-1 lg:grid-cols-12 gap-3 lg:gap-12"
-      >
+      <div className="mt-6 grid grid-cols-1 lg:grid-cols-12 gap-3 lg:gap-12">
         <h3 id={headingId} className="lg:col-span-4 font-display text-2xl lg:text-3xl font-medium text-espresso">
           {caso.title}
         </h3>
         <p className="lg:col-span-8 font-body text-stone leading-relaxed max-w-2xl">
           {caso.description}
         </p>
-      </motion.div>
+      </div>
     </article>
   )
 }
 
 function Resultados() {
-  const headerRef = useRef(null)
-  const isHeaderInView = useInView(headerRef, { once: true, margin: '-100px' })
-
   return (
     <section id="resultados" className="py-24 lg:py-32 bg-sand relative overflow-hidden">
       <div className="container mx-auto px-6 lg:px-12 relative">
-        <header ref={headerRef} className="mb-14 lg:mb-20 max-w-3xl">
-          <motion.span
-            initial={{ opacity: 0, y: 20 }}
-            animate={isHeaderInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5 }}
-            className="eyebrow mb-6"
-          >
-            Resultados
-          </motion.span>
+        <header className="mb-14 lg:mb-20 max-w-3xl">
+          <m.div {...REVELAR}>
+            <span className="eyebrow mb-6">Resultados</span>
 
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            animate={isHeaderInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="section-title mb-6 mt-6"
-          >
-            Casos planejados
-          </motion.h2>
+            <h2 className="section-title mb-6 mt-6">Casos planejados</h2>
+          </m.div>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={isHeaderInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="section-subtitle"
-          >
+          <p className="section-subtitle">
             Cada caso é conduzido com planejamento criterioso, técnica apurada e
             atenção aos detalhes que sustentam o resultado ao longo do tempo.
-          </motion.p>
+          </p>
         </header>
 
         <div className="space-y-16 lg:space-y-24">

@@ -4,7 +4,6 @@
 
 export const PROFISSIONAL = {
   nome: 'Dra. Débora Santos',
-  nomeCurto: 'Débora Santos',
   profissao: 'Cirurgiã-dentista',
   qualificacao: 'Clínica geral',
   cro: 'CRO-SC 23.001',
@@ -80,6 +79,6 @@ export const NAV_LINKS = [
   { name: 'Sobre', href: '#sobre' },
   { name: 'Resultados', href: '#resultados' },
   { name: 'Avaliações', href: '#depoimentos' },
-  { name: 'Serviços', href: '#servicos' },
+  { name: 'Tratamentos', href: '#tratamentos' },
   { name: 'Consultório', href: '#clinica' },
 ]

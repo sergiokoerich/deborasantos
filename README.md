@@ -50,6 +50,7 @@ Ao mudar para um domínio próprio, defina a variável no passo de build do work
 | Avaliações exibidas e nota do Google | `src/data/avaliacoes.js` |
 | Casos de antes e depois (uma imagem para o antes e outra para o depois, mesma largura) | `src/components/sections/Resultados.jsx` e `src/assets/images/resultados/` |
 | Cores, fontes e classes compartilhadas (`btn-primary`, `btn-link`, `eyebrow`, `section-title`…) | `src/index.css` |
+| Curva e entrada padrão das animações (`EASE_OUT`, `REVELAR`) | `src/lib/motion.js` |
 | Imagem de compartilhamento (1200×630) | `public/og-image.jpg` |
 
 `contato.js` é a fonte única: componentes, rodapé, meta tags e JSON-LD leem dele. Ao mudar o horário, atualize também
@@ -94,5 +95,9 @@ A meta é WCAG 2.2 nível AA. Antes de publicar uma mudança visual:
 - texto pequeno precisa de contraste de pelo menos 4,5:1 com o fundo, e texto grande e ícones, 3:1. Sobre o vídeo do
   topo, o contraste depende do quadro: por isso o vídeo fica a 30% de opacidade sobre o fundo café-escuro (`espresso`);
 - tudo deve funcionar só com teclado, com foco visível (terracota no claro, `blush` em fundo escuro com a classe `on-dark`);
-- animações respeitam a preferência "reduzir movimento" do sistema (`MotionConfig reducedMotion="user"` e as variantes
-  `motion-safe:` do Tailwind).
+- animações respeitam a preferência "reduzir movimento" do sistema (`MotionConfig reducedMotion="user"`); com ela
+  ligada, o vídeo do topo nem é baixado até o visitante apertar Reproduzir;
+- nada se repete em loop (WCAG 2.2.2): sem `animate-ping`, `animate-bounce` ou similares;
+- texto corrido nasce visível; só títulos de seção e imagens entram com `REVELAR` (`src/lib/motion.js`). Use `m.div`,
+  `m.a` etc. em vez de `motion.*`: o app roda dentro de `<LazyMotion strict>`, e um `motion.*` dá erro no `npm run dev`;
+- botões e links só com ícone têm alvo de toque de pelo menos 44×44 px.
