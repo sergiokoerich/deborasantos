@@ -4,17 +4,28 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/deborasantos/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#2b2320" />
     <!-- Título, descrição, Open Graph e JSON-LD são injetados pelo vite.config.js (src/data/seo.js). -->
 
-    <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-53ZKVC9Q');</script>
+    <!-- Google Tag Manager: o gtm.js só baixa depois do `load`, com o navegador ocioso,
+         para não disputar CPU com a primeira renderização. Visitas que saem antes disso não contam. -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      window.addEventListener('load', function () {
+        function carregarGtm() {
+          window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+          var script = document.createElement('script');
+          script.async = true;
+          script.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-53ZKVC9Q';
+          document.head.appendChild(script);
+        }
+        if ('requestIdleCallback' in window) requestIdleCallback(carregarGtm, { timeout: 3000 });
+        else setTimeout(carregarGtm, 0);
+      });
+    </script>
     <!-- End Google Tag Manager -->
-    <script type="module" crossorigin src="/deborasantos/assets/index-CRI_TplA.js"></script>
-    <link rel="stylesheet" crossorigin href="/deborasantos/assets/index-DElheGmK.css">
+    <script type="module" crossorigin src="/deborasantos/assets/index-onNowIYU.js"></script>
+    <link rel="stylesheet" crossorigin href="/deborasantos/assets/index-CuQ3PO7n.css">
     <title>Dra. Débora Santos | Cirurgiã-dentista em Florianópolis</title>
     <meta name="description" content="Cirurgiã-dentista (CRO-SC 23.001) no Estreito, Florianópolis. Clínica geral, estética e reabilitação oral. Agende sua avaliação pelo WhatsApp.">
     <meta property="og:type" content="website">
@@ -32,6 +43,8 @@
     <meta name="twitter:description" content="Cirurgiã-dentista (CRO-SC 23.001) no Estreito, Florianópolis. Clínica geral, estética e reabilitação oral. Agende sua avaliação pelo WhatsApp.">
     <meta name="twitter:image" content="https://sergiokoerich.github.io/deborasantos/og-image.jpg">
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"Dentist","name":"Dra. Débora Santos","url":"https://sergiokoerich.github.io/deborasantos/","image":"https://sergiokoerich.github.io/deborasantos/og-image.jpg","telephone":"+5548991979007","address":{"@type":"PostalAddress","streetAddress":"Rua Dr. Heitor Blum, 310, sala 907","addressLocality":"Florianópolis","addressRegion":"SC","postalCode":"88075-110","addressCountry":"BR"},"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"08:00","closes":"18:00"},{"@type":"OpeningHoursSpecification","dayOfWeek":["Saturday"],"opens":"08:00","closes":"13:00"}],"hasMap":"https://www.google.com/maps/search/?api=1&query=Dra.%20D%C3%A9bora%20Santos%20-%20Odontologia%20e%20Est%C3%A9tica&query_place_id=ChIJx6OcG2FNJ5UR5KSqtQ2WPJ0","sameAs":["https://www.instagram.com/dra.deboracsantos/","https://www.google.com/maps/search/?api=1&query=Dra.%20D%C3%A9bora%20Santos%20-%20Odontologia%20e%20Est%C3%A9tica&query_place_id=ChIJx6OcG2FNJ5UR5KSqtQ2WPJ0"]}</script>
+    <link rel="preload" as="font" type="font/woff2" href="/deborasantos/assets/fraunces-latin-opsz-normal-DihXLNYH.woff2" crossorigin>
+    <link rel="preload" as="font" type="font/woff2" href="/deborasantos/assets/inter-latin-400-normal-C38fXH4l.woff2" crossorigin>
   </head>
   <body>
     <!-- Google Tag Manager (noscript) -->
