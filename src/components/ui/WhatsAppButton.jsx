@@ -1,32 +1,54 @@
-import { motion } from 'framer-motion'
+import { useEffect, useState } from 'react'
+import { AnimatePresence, m } from 'framer-motion'
 import { FaWhatsapp } from 'react-icons/fa'
 import { whatsappUrl } from '../../data/contato'
+import { EASE_OUT } from '../../lib/motion'
+
+// Some enquanto um elemento com `data-oculta-whatsapp` (CTA do topo, rodapé) estiver na tela:
+// evita dois botões iguais lado a lado e não cobre o texto do rodapé no celular.
+function useOcultoPorAlvos() {
+  const [oculto, setOculto] = useState(true)
+
+  useEffect(() => {
+    const visiveis = new Set()
+    const observer = new IntersectionObserver((entradas) => {
+      for (const entrada of entradas) {
+        if (entrada.isIntersecting) visiveis.add(entrada.target)
+        else visiveis.delete(entrada.target)
+      }
+      setOculto(visiveis.size > 0)
+    })
+    document.querySelectorAll('[data-oculta-whatsapp]').forEach((alvo) => observer.observe(alvo))
+    return () => observer.disconnect()
+  }, [])
+
+  return oculto
+}
 
 function WhatsAppButton() {
+  const oculto = useOcultoPorAlvos()
+
   return (
     <aside aria-label="Contato rápido">
-      <motion.a
-        href={whatsappUrl()}
-        target="_blank"
-        rel="noopener noreferrer"
-        initial={{ scale: 0, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ delay: 1, type: 'spring', stiffness: 200 }}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-        className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-[#25D366] rounded-full
-                   flex items-center justify-center shadow-lg shadow-[#25D366]/30
-                   hover:shadow-xl hover:shadow-[#25D366]/40 transition-shadow"
-        aria-label="Conversar pelo WhatsApp (abre em nova aba)"
-      >
-        <FaWhatsapp className="w-8 h-8 text-white" aria-hidden="true" />
-
-        {/* Pulse Animation */}
-        <span
-          className="absolute w-full h-full rounded-full bg-[#25D366] motion-safe:animate-ping opacity-30"
-          aria-hidden="true"
-        />
-      </motion.a>
+      <AnimatePresence>
+        {!oculto && (
+          <m.a
+            href={whatsappUrl()}
+            target="_blank"
+            rel="noopener noreferrer"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ duration: 0.3, ease: EASE_OUT }}
+            className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-[#25D366] rounded-full
+                       flex items-center justify-center shadow-md shadow-espresso/25"
+            aria-label="Conversar pelo WhatsApp (abre em nova aba)"
+          >
+            <FaWhatsapp className="w-8 h-8 text-white" aria-hidden="true" />
+          </m.a>
+        )}
+      </AnimatePresence>
     </aside>
   )
 }

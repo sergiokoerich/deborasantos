@@ -20,7 +20,7 @@ const socialLinks = [
 
 function Footer() {
   return (
-    <footer className="on-dark bg-espresso text-cream">
+    <footer data-oculta-whatsapp className="on-dark bg-espresso text-cream">
       {/* Main Footer */}
       <div className="container mx-auto px-6 lg:px-12 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
@@ -87,14 +87,14 @@ function Footer() {
               </p>
             </div>
 
-            {/* Social Links — ícones simples, sem caixa */}
-            <div className="flex gap-6 mt-6">
+            {/* Social Links — ícones simples, sem caixa; p-3 deixa o alvo de toque com 44 px */}
+            <div className="flex -ml-3 mt-3">
               {socialLinks.map((social) => (
                 <LinkExterno
                   key={social.name}
                   href={social.href}
                   aria-label={social.name}
-                  className="text-cream/70 hover:text-blush transition-colors duration-300"
+                  className="p-3 text-cream/70 hover:text-blush transition-colors duration-300"
                 >
                   <social.icon className="w-5 h-5" aria-hidden="true" />
                 </LinkExterno>
@@ -109,9 +109,9 @@ function Footer() {
         <div className="container mx-auto px-6 lg:px-12 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-cream/70 text-sm font-body">
-              © {new Date().getFullYear()} {PROFISSIONAL.nome}. Todos os direitos reservados.
+              © {new Date().getFullYear()} <span translate="no">{PROFISSIONAL.nome}</span>. Todos os direitos reservados.
             </p>
-            <p className="text-cream/70 text-sm font-body">{PROFISSIONAL.cro}</p>
+            <p translate="no" className="text-cream/70 text-sm font-body">{PROFISSIONAL.cro}</p>
           </div>
         </div>
       </div>

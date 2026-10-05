@@ -4,14 +4,25 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#2b2320" />
     <!-- Título, descrição, Open Graph e JSON-LD são injetados pelo vite.config.js (src/data/seo.js). -->
 
-    <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-53ZKVC9Q');</script>
+    <!-- Google Tag Manager: o gtm.js só baixa depois do `load`, com o navegador ocioso,
+         para não disputar CPU com a primeira renderização. Visitas que saem antes disso não contam. -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      window.addEventListener('load', function () {
+        function carregarGtm() {
+          window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+          var script = document.createElement('script');
+          script.async = true;
+          script.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-53ZKVC9Q';
+          document.head.appendChild(script);
+        }
+        if ('requestIdleCallback' in window) requestIdleCallback(carregarGtm, { timeout: 3000 });
+        else setTimeout(carregarGtm, 0);
+      });
+    </script>
     <!-- End Google Tag Manager -->
   </head>
   <body>

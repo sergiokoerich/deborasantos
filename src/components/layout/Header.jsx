@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { HiMenuAlt3, HiX } from 'react-icons/hi'
 import Logo from '../../assets/images/LogoTerracottaDark.svg'
 import LogoClaro from '../../assets/images/LogoCream.svg'
@@ -36,18 +36,26 @@ function Header() {
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [isMobileMenuOpen, closeMenu])
 
+  // Menu do celular: se o Tab levar o foco para fora do cabeçalho, o menu fecha.
+  const handleBlur = (e) => {
+    if (isMobileMenuOpen && e.relatedTarget && !e.currentTarget.contains(e.relatedTarget)) {
+      closeMenu(false)
+    }
+  }
+
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+      onBlur={handleBlur}
+      className={`fixed top-0 left-0 right-0 z-50 border-b transition-all duration-500 ${
         isScrolled
-          ? 'bg-cream/95 backdrop-blur-md shadow-lg py-3'
-          : 'on-dark bg-transparent py-6'
+          ? 'bg-cream/95 backdrop-blur-md border-espresso/10 py-3'
+          : 'on-dark bg-transparent border-transparent py-6'
       }`}
     >
       <div className="container mx-auto px-6 lg:px-12">
         <nav className="flex items-center justify-between" aria-label="Principal">
           {/* Logo */}
-          <motion.a
+          <m.a
             href="#inicio"
             onClick={() => closeMenu(false)}
             initial={{ opacity: 0, x: -20 }}
@@ -60,10 +68,10 @@ function Header() {
               alt={`${PROFISSIONAL.nome}, início`}
               className="h-12 md:h-14 w-auto"
             />
-          </motion.a>
+          </m.a>
 
           {/* Desktop Navigation */}
-          <motion.ul
+          <m.ul
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
@@ -87,10 +95,10 @@ function Header() {
                 </a>
               </li>
             ))}
-          </motion.ul>
+          </m.ul>
 
           {/* CTA Desktop — link de texto editorial */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
@@ -103,7 +111,7 @@ function Header() {
               Agendar avaliação
               <span aria-hidden="true">→</span>
             </LinkExterno>
-          </motion.div>
+          </m.div>
 
           {/* Mobile Menu Button */}
           <button
@@ -126,7 +134,7 @@ function Header() {
       {/* Mobile Menu */}
       <AnimatePresence>
         {isMobileMenuOpen && (
-          <motion.div
+          <m.div
             id="mobile-menu"
             // clip-path em vez de height 'auto': medir a altura faz o framer-motion
             // devolver a página à posição de rolagem anterior e cancela a rolagem até a âncora.
@@ -139,7 +147,7 @@ function Header() {
             <nav className="container mx-auto px-6 py-8" aria-label="Menu do celular">
               <ul className="flex flex-col gap-6">
                 {NAV_LINKS.map((link, index) => (
-                  <motion.li
+                  <m.li
                     key={link.name}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -153,10 +161,10 @@ function Header() {
                     >
                       {link.name}
                     </a>
-                  </motion.li>
+                  </m.li>
                 ))}
               </ul>
-              <motion.div
+              <m.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
@@ -165,9 +173,9 @@ function Header() {
                 <LinkExterno href={whatsappUrl()} className="btn-primary">
                   Agendar avaliação
                 </LinkExterno>
-              </motion.div>
+              </m.div>
             </nav>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </header>

@@ -10,7 +10,7 @@
   --color-sand: #f3ece6; /* fundo das seções alternadas */
   --color-espresso: #2b2320; /* títulos, topo, faixa escura, rodapé */
   --color-stone: #5c5550; /* texto corrido */
-  --color-terracotta: #ab4922; /* cor da marca: botões, ícones, numerais */
+  --color-terracotta: #ab4922; /* cor da marca: botões e ícones */
   --color-terracotta-dark: #8a3a1b; /* hover */
   --color-blush: #d9a48f; /* filetes; texto e foco sobre fundo escuro */
 
@@ -37,6 +37,16 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    /* Âncoras e foco do teclado param abaixo do cabeçalho fixo (72 px + 1 px de filete; 80 px + 1 px
+       a partir de md) e acima do botão flutuante do WhatsApp. */
+    scroll-padding-top: calc(4.5rem + 1px);
+    scroll-padding-bottom: 6rem;
+  }
+
+  @media (width >= 48rem) {
+    html {
+      scroll-padding-top: calc(5rem + 1px);
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -71,6 +81,11 @@
   .on-dark :focus-visible {
     outline-color: var(--color-blush);
   }
+
+  ::selection {
+    background-color: var(--color-blush);
+    color: var(--color-espresso);
+  }
 }
 
 @utility btn-primary {
@@ -103,11 +118,6 @@
     height: 1px;
     background-color: var(--color-blush);
   }
-}
-
-@utility editorial-numeral {
-  @apply font-display font-light text-terracotta;
-  letter-spacing: -0.02em;
 }
 
 ::-webkit-scrollbar {
