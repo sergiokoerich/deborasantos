@@ -5,40 +5,67 @@ import foto1 from '../../assets/images/fotoconsultorio1.webp'
 import foto2 from '../../assets/images/fotoconsultorio2.webp'
 import foto3 from '../../assets/images/fotoconsultorio3.webp'
 import foto4 from '../../assets/images/fotoconsultorio4.webp'
+import LinkExterno from '../ui/LinkExterno'
+import {
+  PROFISSIONAL,
+  TELEFONE,
+  TELEFONE_URL,
+  ENDERECO_LINHAS,
+  ENDERECO_CURTO,
+  HORARIO,
+  MAPS_URL,
+  MAPS_EMBED_URL,
+  whatsappUrl,
+} from '../../data/contato'
 
-const GOOGLE_MAPS_EMBED =
-  'https://www.google.com/maps?q=R.+Dr.+Heitor+Blum,+310+-+Sala+907+-+Estreito,+Florian%C3%B3polis+-+SC,+88075-110&output=embed'
+const fotos = [
+  { src: foto1, alt: 'Vista da janela do consultório ao pôr do sol, com os prédios do bairro' },
+  { src: foto2, alt: 'Copos e xícaras de vidro em bandeja espelhada, ao lado de cápsulas de café, na recepção' },
+  { src: foto3, alt: 'Sacolas vermelhas com a marca Débora Santos – Odontologia Estética e Reabilitação Oral, na janela do consultório' },
+  { src: foto4, alt: 'Mão segurando um par de placas dentárias transparentes contra a janela' },
+]
+
+const linkClasse = 'btn-link mt-3'
 
 const contactInfo = [
   {
     icon: HiLocationMarker,
     title: 'Endereço',
-    lines: [
-      'Rua Dr. Heitor Blum, 310 — sala 907',
-      'Centro Empresarial Vitória Office, 9º andar',
-      'Estreito, Florianópolis/SC · CEP 88075-110',
-    ],
+    lines: ENDERECO_LINHAS,
+    acao: (
+      <LinkExterno href={MAPS_URL} className={linkClasse}>
+        Como chegar <span aria-hidden="true">→</span>
+      </LinkExterno>
+    ),
   },
   {
     icon: HiClock,
     title: 'Horário de Funcionamento',
-    lines: ['Segunda a Sexta: 8h às 18h', 'Sábado: 8h às 13h', 'Domingo: Fechado'],
+    lines: HORARIO.map((h) => `${h.dias}, ${h.horas}`),
   },
   {
     icon: HiPhone,
     title: 'Telefone / WhatsApp',
-    lines: ['(48) 99197-9007'],
+    lines: [],
+    acao: (
+      <span className="flex flex-wrap gap-x-6 gap-y-2">
+        <a href={TELEFONE_URL} className={linkClasse}>
+          Ligar: {TELEFONE.exibicao}
+        </a>
+        <LinkExterno href={whatsappUrl()} className={linkClasse}>
+          WhatsApp <span aria-hidden="true">→</span>
+        </LinkExterno>
+      </span>
+    ),
   },
 ]
-
-const fotos = [foto1, foto2, foto3, foto4]
 
 function Clinica() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
 
   return (
-    <section id="clinica" className="py-24 lg:py-32 bg-forest/5 relative overflow-hidden">
+    <section id="clinica" className="py-24 lg:py-32 bg-sand relative overflow-hidden">
       <div ref={ref} className="container mx-auto px-6 lg:px-12 relative">
 
         {/* ── Parte 1: Header ── */}
@@ -75,17 +102,21 @@ function Clinica() {
 
         {/* ── Parte 2: Galeria de fotos — gap-8, sem raio, sem borda ── */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-20">
-          {fotos.map((src, i) => (
+          {fotos.map((foto, i) => (
             <motion.div
-              key={i}
+              key={foto.src}
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.3 + i * 0.1 }}
-              className="aspect-[4/3] overflow-hidden hover:scale-[1.01] transition-transform duration-500"
+              className="aspect-4/3 overflow-hidden hover:scale-[1.01] transition-transform duration-500"
             >
               <img
-                src={src}
-                alt={`Recepção e ambientes do consultório, foto ${i + 1}`}
+                src={foto.src}
+                alt={foto.alt}
+                width={600}
+                height={800}
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover"
               />
             </motion.div>
@@ -102,28 +133,28 @@ function Clinica() {
           >
             <div className="overflow-hidden">
               <iframe
-                src={GOOGLE_MAPS_EMBED}
+                src={MAPS_EMBED_URL}
                 width="100%"
                 height="450"
                 style={{ border: 0 }}
-                allowFullScreen=""
+                allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                title="Localização do consultório"
+                title="Mapa com a localização do consultório"
               />
             </div>
 
-            <div className="mt-6 pl-6 border-l border-gold">
-              <p className="font-display text-xl text-forest-dark">
-                Consultório Dra. Débora Santos
+            <div className="mt-6 pl-6 border-l border-blush">
+              <p className="font-display text-xl text-espresso">
+                Consultório {PROFISSIONAL.nome}
               </p>
-              <p className="text-sm text-forest/80 font-body mt-1">
-                Rua Dr. Heitor Blum, 310 — sala 907 · Vitória Office · Estreito, Florianópolis/SC
+              <p className="text-sm text-stone font-body mt-1">
+                {ENDERECO_CURTO.join(' · ')}
               </p>
             </div>
           </motion.div>
 
-          {/* Informações de contato — layout horizontal com filete dourado */}
+          {/* Informações de contato — layout horizontal com filete */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
@@ -136,18 +167,19 @@ function Clinica() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.5, delay: 0.7 + index * 0.1 }}
-                className="flex gap-6 pl-6 border-l border-gold"
+                className="flex gap-6 pl-6 border-l border-blush"
               >
-                <info.icon className="w-6 h-6 text-terracotta-dark flex-shrink-0 mt-1" />
+                <info.icon className="w-6 h-6 text-terracotta shrink-0 mt-1" aria-hidden="true" />
                 <div>
-                  <h4 className="font-display text-xl text-forest-dark mb-3">
+                  <h3 className="font-display text-xl font-medium text-espresso mb-3">
                     {info.title}
-                  </h4>
-                  {info.lines.map((line, i) => (
-                    <p key={i} className="text-forest/80 font-body text-sm leading-relaxed">
+                  </h3>
+                  {info.lines.map((line) => (
+                    <p key={line} className="text-stone font-body text-sm leading-relaxed">
                       {line}
                     </p>
                   ))}
+                  {info.acao}
                 </div>
               </motion.div>
             ))}

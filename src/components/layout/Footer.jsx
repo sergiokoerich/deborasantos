@@ -1,31 +1,26 @@
 import { FaInstagram, FaWhatsapp } from 'react-icons/fa'
 import Logo from '../../assets/images/LogoCream.svg'
-
-const navLinks = [
-  { name: 'Início', href: '#inicio' },
-  { name: 'Sobre', href: '#sobre' },
-  { name: 'Resultados', href: '#resultados' },
-  { name: 'Avaliações', href: '#depoimentos' },
-  { name: 'Serviços', href: '#servicos' },
-  { name: 'Consultório', href: '#clinica' },
-]
+import LinkExterno from '../ui/LinkExterno'
+import {
+  NAV_LINKS,
+  PROFISSIONAL,
+  TELEFONE,
+  TELEFONE_URL,
+  ENDERECO_CURTO,
+  HORARIO,
+  INSTAGRAM,
+  MAPS_URL,
+  whatsappUrl,
+} from '../../data/contato'
 
 const socialLinks = [
-  { name: 'Instagram', icon: FaInstagram, href: 'https://www.instagram.com/dra.deboracsantos/' },
-  { name: 'WhatsApp', icon: FaWhatsapp, href: 'https://wa.me/5548991979007' },
+  { name: 'Instagram', icon: FaInstagram, href: INSTAGRAM.url },
+  { name: 'WhatsApp', icon: FaWhatsapp, href: whatsappUrl() },
 ]
 
 function Footer() {
-  const handleNavClick = (e, href) => {
-    e.preventDefault()
-    const element = document.querySelector(href)
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' })
-    }
-  }
-
   return (
-    <footer className="bg-forest-dark text-cream">
+    <footer className="on-dark bg-espresso text-cream">
       {/* Main Footer */}
       <div className="container mx-auto px-6 lg:px-12 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
@@ -33,24 +28,24 @@ function Footer() {
           <div className="lg:col-span-2">
             <img
               src={Logo}
-              alt="Dra. Debora Santos"
+              alt={PROFISSIONAL.nome}
               className="h-14 w-auto mb-6"
             />
             <p className="text-cream/80 font-body leading-relaxed max-w-md">
-              Cuidando do seu sorriso com dedicação e excelência.
-              Transformando sorrisos e devolvendo a confiança aos nossos pacientes.
+              {PROFISSIONAL.profissao} · {PROFISSIONAL.qualificacao}.
+              <br />
+              Saúde bucal e estética com planejamento.
             </p>
           </div>
 
           {/* Navigation */}
-          <div>
-            <h4 className="font-display text-xl text-gold mb-6">Navegação</h4>
+          <nav aria-labelledby="rodape-navegacao">
+            <h2 id="rodape-navegacao" className="font-display text-xl text-blush mb-6">Navegação</h2>
             <ul className="space-y-3">
-              {navLinks.map((link) => (
+              {NAV_LINKS.map((link) => (
                 <li key={link.name}>
                   <a
                     href={link.href}
-                    onClick={(e) => handleNavClick(e, link.href)}
                     className="text-cream/70 hover:text-cream transition-colors font-body text-sm"
                   >
                     {link.name}
@@ -58,42 +53,51 @@ function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
+          </nav>
 
           {/* Contact Info */}
           <div>
-            <h4 className="font-display text-xl text-gold mb-6">Contato</h4>
+            <h2 className="font-display text-xl text-blush mb-6">Contato</h2>
             <div className="space-y-4 text-cream/80 font-body text-sm">
               <p>
-                <span className="text-gold">Endereço:</span><br />
-                Rua Dr. Heitor Blum, 310 — sala 907<br />
-                Vitória Office · Estreito<br />
-                Florianópolis/SC · CEP 88075-110
+                <span className="text-blush">Endereço:</span>
+                <br />
+                {ENDERECO_CURTO[0]}
+                <br />
+                {ENDERECO_CURTO[1]}
+                <br />
+                <LinkExterno href={MAPS_URL} className="underline underline-offset-4 hover:text-cream">
+                  Como chegar
+                </LinkExterno>
               </p>
               <p>
-                <span className="text-gold">Horário:</span><br />
-                Seg - Sex: 8h às 18h<br />
-                Sábado: 8h às 13h
+                <span className="text-blush">Horário:</span>
+                {HORARIO.map((h) => (
+                  <span key={h.dias} className="block">
+                    {h.dias}, {h.horas}
+                  </span>
+                ))}
               </p>
               <p>
-                <span className="text-gold">WhatsApp:</span><br />
-                (48) 99197-9007
+                <span className="text-blush">Telefone e WhatsApp:</span>
+                <br />
+                <a href={TELEFONE_URL} className="underline underline-offset-4 hover:text-cream">
+                  {TELEFONE.exibicao}
+                </a>
               </p>
             </div>
 
             {/* Social Links — ícones simples, sem caixa */}
             <div className="flex gap-6 mt-6">
               {socialLinks.map((social) => (
-                <a
+                <LinkExterno
                   key={social.name}
                   href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
                   aria-label={social.name}
-                  className="text-cream/70 hover:text-gold transition-colors duration-300"
+                  className="text-cream/70 hover:text-blush transition-colors duration-300"
                 >
-                  <social.icon className="w-5 h-5" />
-                </a>
+                  <social.icon className="w-5 h-5" aria-hidden="true" />
+                </LinkExterno>
               ))}
             </div>
           </div>
@@ -104,12 +108,10 @@ function Footer() {
       <div className="border-t border-cream/10">
         <div className="container mx-auto px-6 lg:px-12 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-cream/50 text-sm font-body">
-              © {new Date().getFullYear()} Dra. Debora Santos. Todos os direitos reservados.
+            <p className="text-cream/70 text-sm font-body">
+              © {new Date().getFullYear()} {PROFISSIONAL.nome}. Todos os direitos reservados.
             </p>
-            <p className="text-cream/50 text-sm font-body">
-              CRO-SC: 23.001
-            </p>
+            <p className="text-cream/70 text-sm font-body">{PROFISSIONAL.cro}</p>
           </div>
         </div>
       </div>
